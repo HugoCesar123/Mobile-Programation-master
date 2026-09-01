@@ -29,6 +29,13 @@ class _LocalizacaoPageState extends State<LocalizacaoPage> {
   double latitude = 0;
   double longitude = 0;
 
+  
+  double latitudeDestino = -21.453240;
+  double longitudeDestino = -47.017570;
+
+  
+  double distancia = 0;
+
   Future<void> buscarLocalizacao() async {
     bool servicoAtivo = await Geolocator.isLocationServiceEnabled();
 
@@ -53,10 +60,19 @@ class _LocalizacaoPageState extends State<LocalizacaoPage> {
     setState(() {
       latitude = posicao.latitude;
       longitude = posicao.longitude;
+
+    
+      distancia = Geolocator.distanceBetween(
+        latitude,
+        longitude,
+        latitudeDestino,
+        longitudeDestino,
+      );
     });
 
     print('Latitude: $latitude');
     print('Longitude: $longitude');
+    print('Distância: $distancia metros');
   }
 
   @override
@@ -95,6 +111,17 @@ class _LocalizacaoPageState extends State<LocalizacaoPage> {
 
             const SizedBox(height: 30),
 
+            // DISTÂNCIA ATÉ O LOCAL PREDEFINIDO
+            Text(
+              'A Distância daqui até minha casa é: ${distancia.toStringAsFixed(2)} metros',
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 30),
+
             ElevatedButton(
               onPressed: buscarLocalizacao,
               child: const Text('Buscar Localização'),
@@ -106,4 +133,3 @@ class _LocalizacaoPageState extends State<LocalizacaoPage> {
     );
   }
 }
-        
